@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_17_150128) do
     t.text "board_data"
     t.text "revealed_data"
     t.text "flagged_data"
+    t.boolean "game_over", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

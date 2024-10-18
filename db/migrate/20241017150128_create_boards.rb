@@ -9,6 +9,7 @@ class CreateBoards < ActiveRecord::Migration[7.1]
       t.text :board_data
       t.text :revealed_data
       t.text :flagged_data
+      t.boolean :game_over, default: false
       t.timestamps
     end
   end

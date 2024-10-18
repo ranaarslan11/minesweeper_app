@@ -1,4 +1,5 @@
 class BoardsController < ApplicationController
+  before_action :find_board, except: :index
   def index
     @recent_boards = Board.order(created_at: :desc).limit(10)
     @board = Board.new
@@ -15,24 +16,26 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @board = Board.find(params[:id])
   end
 
   def reveal_cell
-    @board = Board.find(params[:id])
     row = params[:row].to_i
     col = params[:col].to_i
 
     if @board.board_data[row][col] == 'M'
-      render json: { game_over: true }
-    else
-      @board.revealed_data[row][col] = true
-      @board.save
-      render json: { game_over: false, cell_value: @board.board_data[row][col] }
+      @board.game_over = true
     end
+
+    @board.revealed_data[row][col] = true
+    @board.save
+    render json: { game_over: @board.game_over, cell_value: @board.board_data[row][col] }
   end
 
   private
+
+  def find_board
+    @board = Board.find_by id: params[:id]
+  end
 
   def board_params
     params.require(:board).permit(:name, :email, :width, :height, :mines)
